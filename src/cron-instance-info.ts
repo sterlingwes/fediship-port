@@ -24,16 +24,29 @@ const runInstanceFetch = async (
   kv: ReturnType<typeof storage>
 ) => {
   const masto = mastodonRequests();
-  const info = await masto.getInstanceInfo(instanceUri);
-  if (!info.ok) {
-    await kv.saveInstanceSkip(instanceUri, info.statusCode);
-    return jsonError("Failed to fetch instance info");
+  console.log(`fetching ${instanceUri}`);
+
+  try {
+    const info = await masto.getInstanceInfo(instanceUri);
+    if (!info.ok) {
+      await kv.saveInstanceSkip(instanceUri, info.statusCode);
+      return jsonError(`Failed to fetch instance info for ${instanceUri}`);
+    }
+    const peersResponse = await masto.getInstancePeers(instanceUri);
+    let peers: string[] = [];
+    if (peersResponse.ok && Array.isArray(peersResponse.result)) {
+      peers = peersResponse.result;
+    }
+
+    await kv.saveInstance(info.result, peers);
+
+    return jsonSuccess({ ok: true });
+  } catch (e) {
+    const error =
+      typeof e === "object" ? (e as Error).message : "unknown error";
+    console.error(`runInstanceFetch failed for ${instanceUri}: ${error}`);
+    return jsonError(error);
   }
-  const peers = await masto.getInstancePeers(instanceUri);
-
-  await kv.saveInstance(info.result, peers.ok ? peers.result : []);
-
-  return jsonSuccess({ ok: true });
 };
 
 const initialInstance = "mastodon.social";
@@ -67,7 +80,6 @@ const getNextInstanceUris = (index: InstanceHostIndex, requiredCount = 1) => {
     if (!uri) break;
     if (shouldFetchInstanceInfo(index, uri)) {
       matches.push(uri);
-      console.log(`next fetch found: ${uri}`);
     }
   }
 
