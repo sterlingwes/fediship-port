@@ -1,4 +1,5 @@
-import { ErrorResult, RequestResult, SuccessResult } from "../types";
+import { RequestResult } from "../types";
+import { errorResult, fetchWithTimeout, successResult } from "./fetch";
 import { MastoInstanceInfo } from "./mastodon-types";
 
 const asInstanceInfo = ({
@@ -19,25 +20,12 @@ const asInstanceInfo = ({
   thumbnail,
 });
 
-const successResult = <T>(result: T): SuccessResult<T> => ({
-  ok: true,
-  result,
-});
-
-const errorResult = (status?: number): ErrorResult => ({
-  ok: false,
-  statusCode: status || 1,
-});
-
-const jsonHeader = { headers: { "Content-type": "application/json" } };
-
 export default () => {
   const getInstanceInfo = async (
     instanceUri: string
   ): RequestResult<MastoInstanceInfo> => {
-    const infoResponse = await fetch(
-      `https://${instanceUri}/api/v1/instance`,
-      jsonHeader
+    const infoResponse = await fetchWithTimeout(
+      `https://${instanceUri}/api/v1/instance`
     );
     if (!infoResponse.ok) {
       console.error(
@@ -63,9 +51,8 @@ export default () => {
   const getInstancePeers = async (
     instanceUri: string
   ): RequestResult<string[]> => {
-    const peerResponse = await fetch(
-      `https://${instanceUri}/api/v1/instance/peers`,
-      jsonHeader
+    const peerResponse = await fetchWithTimeout(
+      `https://${instanceUri}/api/v1/instance/peers`
     );
     if (!peerResponse.ok) {
       console.error(
