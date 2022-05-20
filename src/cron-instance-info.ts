@@ -32,7 +32,6 @@ const runInstanceFetch = async (
   const peers = await masto.getInstancePeers(instanceUri);
 
   await kv.saveInstance(info.result, peers.ok ? peers.result : []);
-  await kv.saveAllInstances();
 
   return jsonSuccess({ ok: true });
 };
@@ -50,29 +49,29 @@ const cutTheDeck = (arr: string[]) => {
   return [...arr.slice(cut), ...arr.slice(0, cut)];
 };
 
-const getNextInstanceUri = (index: InstanceHostIndex) => {
+const getNextInstanceUris = (index: InstanceHostIndex, requiredCount = 1) => {
   const uris = Object.keys(index);
 
   if (!uris.length) {
     console.log(`starting search from ${initialInstance}`);
-    return initialInstance;
+    return [initialInstance];
   }
 
   const shuffledUris = cutTheDeck(uris);
 
   console.log(`searching for next fetch in ${shuffledUris.length} hosts`);
 
-  let match;
-  while (!match && shuffledUris.length) {
+  const matches: string[] = [];
+  while (matches.length < requiredCount && shuffledUris.length) {
     const uri = shuffledUris.shift();
     if (!uri) break;
     if (shouldFetchInstanceInfo(index, uri)) {
-      match = uri;
+      matches.push(uri);
       console.log(`next fetch found: ${uri}`);
     }
   }
 
-  return match;
+  return matches;
 };
 
 const run = async (env: Env) => {
@@ -80,30 +79,36 @@ const run = async (env: Env) => {
 
   const kv = storage(env);
   const index = await kv.readAllInstances();
-  const nextUri = getNextInstanceUri(index);
+  const [nextUri] = getNextInstanceUris(index);
   if (!nextUri) {
     console.log("Skipping fetch, no uris outside TTL");
     return jsonSuccess({ ok: true, skip: true });
   }
 
+  let response: Response;
+
   if (requestBatch > 1) {
-    // console.log(`Doing request batch of ${requestBatch}`);
-    // await [...Array(requestBatch)].reduce((chain) => {
-    //   return chain.then(() => {
-    //     const nextBatchUri = getNextInstanceUri(index);
-    //     if (!nextBatchUri) {
-    //       console.log("Ending batch run, no uris outside TTL");
-    //       return;
-    //     }
-    //     return runInstanceFetch(nextBatchUri, kv);
-    //   });
-    // }, Promise.resolve() as Promise<unknown>);
-    return jsonSuccess({ batch: true });
+    const nextBatch = getNextInstanceUris(index, requestBatch);
+    console.log(
+      `Targeting request batch of ${requestBatch}, found ${nextBatch.length}`
+    );
+    const responses = await Promise.all(
+      nextBatch.map((uri) => runInstanceFetch(uri, kv))
+    );
+    const successCount = responses.reduce(
+      (acc, res) => (res.ok ? acc + 1 : acc),
+      0
+    );
+    console.log(
+      `Done batch, ${successCount} of ${responses.length} successful`
+    );
+    response = jsonSuccess({ ok: true, batch: nextBatch.length });
   } else {
-    console.log(env);
+    response = await runInstanceFetch(nextUri, kv);
   }
 
-  return runInstanceFetch(nextUri, kv);
+  await kv.saveAllInstances();
+  return response;
 };
 
 export default {
