@@ -102,7 +102,7 @@ const run = async (env: Env) => {
     console.log(
       `Done batch, ${successCount} of ${responses.length} successful`
     );
-    response = jsonSuccess({ ok: true, batch: nextBatch.length });
+    response = jsonSuccess({ ok: true, batch: nextBatch.length, successCount });
   } else {
     response = await runInstanceFetch(nextUri, kv);
   }
