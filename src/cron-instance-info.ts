@@ -125,7 +125,7 @@ const run = async (env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    // return new Response("Go away", { status: 404 });
+    return new Response("Go away", { status: 404 });
 
     if (request.url.includes("favicon.ico")) {
       return new Response("No icon", { status: 404 });
