@@ -128,7 +128,7 @@ const run = async (env: Env) => {
   }
 
   await kv.saveAllInstances();
-  kv.devLogStats();
+  kv.logStats();
   return response;
 };
 

@@ -2,10 +2,8 @@ import { Env, InstanceHostIndex } from "../types";
 import { MastoInstanceInfo } from "./mastodon-types";
 
 const INSTANCE_INDEX_KV = "_instance_index";
-const INSTANCE_IGNORES_KV = "_instance_ignores";
 
 export default (env: Env) => {
-  const enableStats = env.DEV === "1";
   let readCount = 0;
   let writeCount = 0;
 
@@ -68,8 +66,7 @@ export default (env: Env) => {
     };
   };
 
-  const devLogStats = () => {
-    if (!enableStats) return;
+  const logStats = () => {
     console.log(`kv operations: ${readCount} reads, ${writeCount} writes`);
   };
 
@@ -78,6 +75,6 @@ export default (env: Env) => {
     saveAllInstances,
     saveInstance,
     saveInstanceSkip,
-    devLogStats,
+    logStats,
   };
 };

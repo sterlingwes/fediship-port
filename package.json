@@ -10,9 +10,11 @@
     "cron:dev": "wrangler dev --config cron-instance-info.toml",
     "api:publish": "wrangler publish --config api-worker.toml",
     "api:tail": "wrangler tail --config api-worker.toml",
-    "api:dev": "wrangler dev --config api-worker.toml"
+    "api:dev": "wrangler dev --config api-worker.toml",
+    "types": "tsc --noEmit"
   },
   "devDependencies": {
+    "typescript": "^4.6.4",
     "wrangler": "^2.0.6"
   }
 }
