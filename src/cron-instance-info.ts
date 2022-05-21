@@ -29,7 +29,15 @@ const runInstanceFetch = async (
   try {
     const info = await masto.getInstanceInfo(instanceUri);
     if (!info.ok) {
-      await kv.saveInstanceSkip(instanceUri, info.statusCode);
+      try {
+        await kv.saveInstanceSkip(instanceUri, info.statusCode);
+      } catch (e) {
+        if (typeof e === "object" && (e as Error).message) {
+          throw e;
+        }
+
+        throw new Error(`Failed marking skip for instance ${instanceUri}`);
+      }
       return jsonError(`Failed to fetch instance info for ${instanceUri}`);
     }
     const peersResponse = await masto.getInstancePeers(instanceUri);
