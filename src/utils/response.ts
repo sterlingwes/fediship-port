@@ -9,3 +9,9 @@ export const jsonSuccess = (body: Record<string, any>) =>
     headers: { "Content-Type": "application/json" },
     status: 200,
   });
+
+export const jsonNotFound = (body: Record<string, any>) =>
+  new Response(JSON.stringify({ error: "Not found", ...body }), {
+    headers: { "Content-Type": "application/json" },
+    status: 404,
+  });
