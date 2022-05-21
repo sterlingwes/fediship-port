@@ -60,8 +60,6 @@ export default (env: Env) => {
       l: Date.now(),
       s: status,
     };
-
-    await saveAllInstances();
   };
 
   return {
