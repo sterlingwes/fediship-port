@@ -1,6 +1,7 @@
 export interface Env {
   INSTANCE_INFO: KVNamespace;
   REQUEST_BATCH: string;
+  DEV: string; // "0" or "1"
 }
 
 export type InstanceHostIndex = Record<string, RecordStatus | undefined>;

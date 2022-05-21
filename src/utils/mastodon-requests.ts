@@ -29,14 +29,14 @@ export default () => {
     );
     if (!infoResponse.ok) {
       console.error(
-        `Failed to get instance info. Status: ${infoResponse.status}`
+        `Failed to get instance info for ${instanceUri}. Status: ${infoResponse.status}`
       );
       return errorResult(infoResponse.status);
     }
 
     const contentType = infoResponse.headers.get("Content-type");
     if (contentType?.includes("json") === false) {
-      console.error(`Unexpected response body format`);
+      console.error(`Unexpected response body format for ${instanceUri}`);
       return errorResult();
     }
 
@@ -56,14 +56,14 @@ export default () => {
     );
     if (!peerResponse.ok) {
       console.error(
-        `Failed to get instance peers. Status: ${peerResponse.status}`
+        `Failed to get instance peers for ${instanceUri}. Status: ${peerResponse.status}`
       );
       return errorResult(peerResponse.status);
     }
 
     const contentType = peerResponse.headers.get("Content-type");
     if (contentType?.includes("json") === false) {
-      console.error(`Unexpected response body format`);
+      console.error(`Unexpected response body format for ${instanceUri}`);
       return errorResult();
     }
 

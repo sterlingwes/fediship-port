@@ -5,8 +5,13 @@ const INSTANCE_INDEX_KV = "_instance_index";
 const INSTANCE_IGNORES_KV = "_instance_ignores";
 
 export default (env: Env) => {
+  const enableStats = env.DEV === "1";
+  let readCount = 0;
+  let writeCount = 0;
+
   const readJson = async <T>(key: string) => {
     const value = await env.INSTANCE_INFO.get(key);
+    readCount += 1;
     if (!value) return;
     try {
       return JSON.parse(value) as T;
@@ -17,6 +22,7 @@ export default (env: Env) => {
 
   const saveJson = async (key: string, value: unknown) => {
     await env.INSTANCE_INFO.put(key, JSON.stringify(value));
+    writeCount += 1;
   };
 
   let instanceIndex: InstanceHostIndex | undefined;
@@ -62,10 +68,16 @@ export default (env: Env) => {
     };
   };
 
+  const devLogStats = () => {
+    if (!enableStats) return;
+    console.log(`kv operations: ${readCount} reads, ${writeCount} writes`);
+  };
+
   return {
     readAllInstances,
     saveAllInstances,
     saveInstance,
     saveInstanceSkip,
+    devLogStats,
   };
 };
