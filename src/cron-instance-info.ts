@@ -145,12 +145,6 @@ const run = async (env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    if (request.url.endsWith("fix-uri-prefixes")) {
-      const kv = storage(env);
-      await kv.migrations.fixUriPrefixes();
-      return jsonSuccess({ migrated: true });
-    }
-
     return new Response("Go away", { status: 404 });
 
     if (request.url.includes("favicon.ico")) {

@@ -4,13 +4,20 @@ import storage from "./utils/storage";
 
 export default {
   async fetch(request: Request, env: Env) {
+    const kv = storage(env);
+
+    // if (request.url.endsWith("fix-uri-prefixes")) {
+    //   const kv = storage(env);
+    //   await kv.migrations.fixUriPrefixes();
+    //   return jsonSuccess({ migrated: true });
+    // }
+
     const path = request.url.split("/").slice(3).join("/");
 
     if (path !== "api/v1/status") {
       return jsonNotFound({ path });
     }
 
-    const kv = storage(env);
     const instances = await kv.readAllInstances();
     const counts = Object.keys(instances).reduce(
       (acc, instanceUri) => {
