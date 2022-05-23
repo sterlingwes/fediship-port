@@ -1,5 +1,6 @@
 import { Env, InstanceHostIndex } from "../types";
 import { MastoInstanceInfo } from "./mastodon-types";
+import { NodeInfoV2 } from "./nodeinfo-types";
 
 const INSTANCE_INDEX_KV = "_instance_index";
 
@@ -40,18 +41,20 @@ export default (env: Env) => {
     await saveJson(INSTANCE_INDEX_KV, { ...instanceIndex, ...instanceSaves });
   };
 
+  const cleanUri = (uri: string) => uri.replace(/^https?:\/\//, "");
+
   const saveInstance = async (
-    info: MastoInstanceInfo,
+    info: MastoInstanceInfo | { nfo: NodeInfoV2; uri: string },
     peers?: string[] | undefined
   ) => {
     await saveJson(info.uri, { ...info, peers });
     const currentIndexValue = instanceSaves[info.uri];
-    instanceSaves[info.uri] = { ...currentIndexValue, l: Date.now() };
+    instanceSaves[cleanUri(info.uri)] = { ...currentIndexValue, l: Date.now() };
 
     if (peers) {
       peers.forEach((peer) => {
-        if (!instanceSaves[peer]) {
-          instanceSaves[peer] = {};
+        if (!instanceSaves[cleanUri(peer)]) {
+          instanceSaves[cleanUri(peer)] = {};
         }
       });
     }
@@ -70,11 +73,26 @@ export default (env: Env) => {
     console.log(`kv operations: ${readCount} reads, ${writeCount} writes`);
   };
 
+  const migrations = {
+    fixUriPrefixes: async () => {
+      const instances = await readAllInstances();
+      const newInstances = Object.keys(instances).reduce(
+        (acc, uri) => ({
+          ...acc,
+          [cleanUri(uri)]: instances[uri],
+        }),
+        {}
+      );
+      await saveJson(INSTANCE_INDEX_KV, newInstances);
+    },
+  };
+
   return {
     readAllInstances,
     saveAllInstances,
     saveInstance,
     saveInstanceSkip,
     logStats,
+    migrations,
   };
 };

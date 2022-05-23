@@ -1,5 +1,6 @@
 import { Env, InstanceHostIndex } from "./types";
 import mastodonRequests from "./utils/mastodon-requests";
+import nodeInfoRequests from "./utils/nodeinfo-requests";
 import { jsonError, jsonSuccess } from "./utils/response";
 import storage from "./utils/storage";
 
@@ -24,11 +25,21 @@ const runInstanceFetch = async (
   kv: ReturnType<typeof storage>
 ) => {
   const masto = mastodonRequests();
+  const nodeInfo = nodeInfoRequests();
   console.log(`fetching ${instanceUri}`);
 
   try {
     const info = await masto.getInstanceInfo(instanceUri);
     if (!info.ok) {
+      const fediNodeInfo = await nodeInfo.getNodeInfo(instanceUri);
+      if (fediNodeInfo.ok) {
+        console.log(
+          `saved nodeinfo fro ${instanceUri}, no skip, no peers list`
+        );
+        await kv.saveInstance({ nfo: fediNodeInfo.result, uri: instanceUri });
+        return jsonSuccess({ ok: true });
+      }
+
       try {
         await kv.saveInstanceSkip(instanceUri, info.statusCode);
       } catch (e) {
@@ -134,6 +145,12 @@ const run = async (env: Env) => {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    if (request.url.endsWith("fix-uri-prefixes")) {
+      const kv = storage(env);
+      await kv.migrations.fixUriPrefixes();
+      return jsonSuccess({ migrated: true });
+    }
+
     return new Response("Go away", { status: 404 });
 
     if (request.url.includes("favicon.ico")) {
