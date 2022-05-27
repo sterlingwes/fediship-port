@@ -56,6 +56,9 @@ export default {
       failRatio: Math.round(
         (counts.failed / (counts.fetched + counts.failed)) * 100
       ),
+      progress: Math.round(
+        ((counts.fetched + counts.failed) / counts.total) * 100
+      ),
     };
 
     return jsonSuccess({ counts, stats });
