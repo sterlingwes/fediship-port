@@ -4,7 +4,7 @@ import nodeInfoRequests from "./utils/nodeinfo-requests";
 import { jsonError, jsonSuccess } from "./utils/response";
 import storage from "./utils/storage";
 
-const FETCH_TTL_MS = 8.64e7 * 5; // 5 days
+const FETCH_TTL_MS = 8.64e7 * 15; // 5 days
 
 const shouldFetchInstanceInfo = (index: InstanceHostIndex, uri: string) => {
   const instance = index[uri];
