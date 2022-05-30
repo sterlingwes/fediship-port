@@ -1,6 +1,7 @@
 export interface Env {
   INSTANCE_INFO: KVNamespace;
   REQUEST_BATCH: string;
+  R2_ERROR_REPORTS: R2Bucket;
 }
 
 export type InstanceHostIndex = Record<string, RecordStatus | undefined>;

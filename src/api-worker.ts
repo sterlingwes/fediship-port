@@ -1,6 +1,13 @@
+import { nanoid } from "nanoid";
 import { Env } from "./types";
 import { jsonNotFound, jsonSuccess } from "./utils/response";
 import storage from "./utils/storage";
+
+const handleErrorReport = async (request: Request, env: Env) => {
+  const key = nanoid();
+  env.R2_ERROR_REPORTS.put(key, request.body);
+  return jsonSuccess({ saved: true });
+};
 
 export default {
   async fetch(request: Request, env: Env) {
@@ -13,6 +20,10 @@ export default {
     // }
 
     const path = request.url.split("/").slice(3).join("/");
+
+    if (path === "api/v1/errors" && request.method.toLowerCase() === "post") {
+      return handleErrorReport(request, env);
+    }
 
     if (path !== "api/v1/status") {
       return jsonNotFound({ path });

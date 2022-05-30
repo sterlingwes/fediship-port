@@ -4,3 +4,8 @@ compatibility_date = "2022-05-19"
 kv_namespaces = [
   { binding = "INSTANCE_INFO", id = "7f7cc880d83e43488f5a21515750158d", preview_id = "c46c7f6a0ee746e293bf66838930414c" }
 ]
+
+[[r2_buckets]]
+binding = 'R2_ERROR_REPORTS'
+bucket_name = 'fediship-error-reports'
+preview_bucket_name = 'fediship-error-reports-preview'
