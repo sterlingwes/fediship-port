@@ -6,10 +6,16 @@
   "author": "Wes Johnson <wes@swj.io>",
   "license": "MIT",
   "workspaces": [
-    "workers/**"
+    "workers/**",
+    "errors-ui/**"
   ],
   "scripts": {
-    "api:dev": "yarn workspace workers api:dev"
+    "api:dev": "yarn workspace workers api:dev",
+    "errors:dev":"yarn workspace errors-ui start",
+    "errors:push":"yarn workspace errors-ui push", 
+    "test": "yarn workspaces run test",
+    "types": "yarn workspaces run types",
+    "build": "yarn workspaces run build"
   },
   "devDependencies": {
     "typescript": "^4.6.4",

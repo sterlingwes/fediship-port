@@ -12,7 +12,9 @@
     "api:publish": "wrangler publish --config api-worker.toml",
     "api:tail": "wrangler tail --config api-worker.toml",
     "api:dev": "wrangler dev --config api-worker.toml",
-    "types": "tsc --noEmit"
+    "types": "tsc --noEmit",
+    "test": "echo no tests for workers",
+    "build": "echo no build for workers"
   },
   "dependencies": {
     "nanoid": "^3.3.4"

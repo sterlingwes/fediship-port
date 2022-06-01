@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "workers": ["workers/src"],
+      "errors-ui": ["errors-ui/src"]
+    }
+  },
+  "references": [
+    { "path": "workers" },
+    { "path": "errors-ui" }
+  ]
+}

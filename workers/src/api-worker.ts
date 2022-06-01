@@ -13,7 +13,7 @@ const handleErrorReport = async (request: Request, env: Env) => {
 const listErrorReports = async (env: Env) => {
   const items = await env.KV_ERRORS.list();
   return jsonSuccess({
-    reports: items.keys.map((key) => key.name),
+    reports: items.keys,
     more: !items.list_complete,
   });
 };
