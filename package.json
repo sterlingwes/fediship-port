@@ -1,23 +1,18 @@
 {
-  "name": "fediship-worker",
-  "version": "1.0.0",
-  "repository": "https://github.com/sterlingwes/fediship-worker.git",
+  "name": "fediship-port-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "repository": "https://github.com/sterlingwes/fediship-port.git",
   "author": "Wes Johnson <wes@swj.io>",
   "license": "MIT",
+  "workspaces": [
+    "workers/**"
+  ],
   "scripts": {
-    "cron:publish": "wrangler publish --config cron-instance-info.toml",
-    "cron:tail": "wrangler tail --config cron-instance-info.toml",
-    "cron:dev": "wrangler dev --config cron-instance-info.toml",
-    "api:publish": "wrangler publish --config api-worker.toml",
-    "api:tail": "wrangler tail --config api-worker.toml",
-    "api:dev": "wrangler dev --config api-worker.toml",
-    "types": "tsc --noEmit"
+    "api:dev": "yarn workspace workers api:dev"
   },
   "devDependencies": {
     "typescript": "^4.6.4",
     "wrangler": "^2.0.6"
-  },
-  "dependencies": {
-    "nanoid": "^3.3.4"
   }
 }

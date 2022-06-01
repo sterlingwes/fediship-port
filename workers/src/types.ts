@@ -1,5 +1,6 @@
 export interface Env {
   INSTANCE_INFO: KVNamespace;
+  KV_ERRORS: KVNamespace;
   REQUEST_BATCH: string;
   R2_ERROR_REPORTS: R2Bucket;
 }
