@@ -3,11 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "workers": ["workers/src"],
-      "errors-ui": ["errors-ui/src"]
+      "errors-ui": ["errors-ui/src"],
+      "api-common": ["api-common/src"]
     }
-  },
-  "references": [
-    { "path": "workers" },
-    { "path": "errors-ui" }
-  ]
+  }
 }

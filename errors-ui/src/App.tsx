@@ -1,47 +1,58 @@
-import React, {useEffect, useState} from 'react';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
 
-const api = process.env.REACT_APP_API_BASE
+const api = process.env.REACT_APP_API_BASE;
 
-interface Report { name: string }
-interface ListResponse { reports: Report[], more: boolean }
+interface Report {
+  name: string;
+}
+interface ListResponse {
+  reports: Report[];
+  more: boolean;
+}
 
 function App() {
-  const [list, setList] = useState<Report[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [list, setList] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!api) {
-      setError('No api host set')
+      setError("No api host set");
       return;
     }
 
     const fetchList = async () => {
-      const response = await fetch(`${api}/errors`, {mode: 'no-cors'})
+      const response = await fetch(`${api}/errors`);
       if (!response.ok) {
-        setError('Response not ok')
+        setError("Response not ok");
         return;
       }
 
-      const list = await response.json()
+      const list = await response.json();
       if (!(list as ListResponse).reports) {
-        setError('No reports available')
+        setError("No reports available");
         return;
       }
-      setList(list)
-    }    
+      setList(list);
+    };
 
-    setLoading(true)
-    fetchList().then(() => setLoading(false))
-  }, [])
+    setLoading(true);
+    fetchList().then(() => setLoading(false));
+  }, []);
 
   return (
     <div className="App">
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {list.length > 0 ? <p>Showing {list.length} reports</p>  : <p>No reports to show</p>}
-      {list.map(report => <p>{report.name}</p>)}
+      {list.length > 0 ? (
+        <p>Showing {list.length} reports</p>
+      ) : (
+        <p>No reports to show</p>
+      )}
+      {list.map((report) => (
+        <p>{report.name}</p>
+      ))}
     </div>
   );
 }

@@ -1,0 +1,11 @@
+name = "fediship-errors-api"
+main = "src/errors-api.ts"
+compatibility_date = "2022-05-19"
+kv_namespaces = [
+  { binding = "KV_ERRORS", id = "f82f32aec2cb47859431f06f6a9e67ea", preview_id = "a62ffe29103a41a59607287aa5d89189" }
+]
+
+[[r2_buckets]]
+binding = 'R2_ERROR_REPORTS'
+bucket_name = 'fediship-error-reports'
+preview_bucket_name = 'fediship-error-reports-preview'

@@ -6,13 +6,17 @@
   "author": "Wes Johnson <wes@swj.io>",
   "license": "MIT",
   "workspaces": [
+    "api-common/**",
     "workers/**",
-    "errors-ui/**"
+    "errors-ui/**",
+    "errors-api/**"
   ],
   "scripts": {
     "api:dev": "yarn workspace workers api:dev",
-    "errors:dev":"yarn workspace errors-ui start",
-    "errors:push":"yarn workspace errors-ui push", 
+    "errors-ui:dev":"yarn workspace errors-ui start",
+    "errors-ui:push":"yarn workspace errors-ui push",
+    "errors-api:dev":"yarn workspace errors-api dev",
+    "errors-api:push":"yarn workspace errors-api push",
     "test": "yarn workspaces run test",
     "types": "yarn workspaces run types",
     "build": "yarn workspaces run build"

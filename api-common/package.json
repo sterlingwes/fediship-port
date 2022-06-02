@@ -1,0 +1,13 @@
+{
+  "name": "api-common",
+  "version": "1.0.0",
+  "repository": "https://github.com/sterlingwes/fediship-port.git",
+  "author": "Wes Johnson <wes@swj.io>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "types": "tsc --noEmit",
+    "test": "echo no tests for errors-api",
+    "build": "echo no build for errors-api"
+  }
+}

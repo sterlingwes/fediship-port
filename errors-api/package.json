@@ -1,0 +1,19 @@
+{
+  "name": "errors-api",
+  "version": "1.0.0",
+  "repository": "https://github.com/sterlingwes/fediship-port.git",
+  "author": "Wes Johnson <wes@swj.io>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "push": "wrangler publish --config errors-api.toml",
+    "tail": "wrangler tail --config errors-api.toml",
+    "dev": "wrangler dev --config errors-api.toml",
+    "types": "tsc --noEmit",
+    "test": "echo no tests for errors-api",
+    "build": "echo no build for errors-api"
+  },
+  "dependencies": {
+    "nanoid": "^3.3.4"
+  }
+}
