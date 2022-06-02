@@ -29,12 +29,12 @@ function App() {
         return;
       }
 
-      const list = await response.json();
-      if (!Array.isArray((list as ListResponse).reports)) {
+      const list: ListResponse = await response.json();
+      if (!Array.isArray(list.reports)) {
         setError("No reports available");
         return;
       }
-      setList(list.response);
+      setList(list.reports);
     };
 
     setLoading(true);
