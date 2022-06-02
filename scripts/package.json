@@ -1,0 +1,17 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "^2.0.0",
+    "ts-node": "^10.8.0"
+  },
+  "scripts": {
+    "fetch-kv": "ts-node fetch-kv-data.ts",
+    "fetch-meta": "ts-node fetch-instance-meta.ts",
+    "rank": "ts-node rank-instances.ts"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.6.1"
+  }
+}

@@ -9,17 +9,21 @@
     "api-common/**",
     "workers/**",
     "errors-ui/**",
-    "errors-api/**"
+    "errors-api/**",
+    "scripts/**"
   ],
   "scripts": {
     "api:dev": "yarn workspace workers api:dev",
-    "errors-ui:dev":"yarn workspace errors-ui start",
-    "errors-ui:push":"yarn workspace errors-ui push",
-    "errors-api:dev":"yarn workspace errors-api dev",
-    "errors-api:push":"yarn workspace errors-api push",
+    "errors-ui:dev": "yarn workspace errors-ui start",
+    "errors-ui:push": "yarn workspace errors-ui push",
+    "errors-api:dev": "yarn workspace errors-api dev",
+    "errors-api:push": "yarn workspace errors-api push",
     "test": "yarn workspaces run test",
     "types": "yarn workspaces run types",
-    "build": "yarn workspaces run build"
+    "build": "yarn workspaces run build",
+    "script:fetchkv": "yarn workspace scripts fetch-kv",
+    "script:fetchmeta": "yarn workspace scripts fetch-meta",
+    "script:rank": "yarn workspace scripts rank"
   },
   "devDependencies": {
     "typescript": "^4.6.4",
