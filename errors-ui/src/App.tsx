@@ -30,11 +30,11 @@ function App() {
       }
 
       const list = await response.json();
-      if (!(list as ListResponse).reports) {
+      if (!Array.isArray((list as ListResponse).reports)) {
         setError("No reports available");
         return;
       }
-      setList(list);
+      setList(list.response);
     };
 
     setLoading(true);
