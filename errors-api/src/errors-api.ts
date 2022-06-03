@@ -1,6 +1,11 @@
 import { nanoid } from "nanoid";
 import { jsonBadRequest, jsonNotFound, jsonSuccess, Env } from "api-common";
 
+interface ReportKV {
+  key: string;
+  read: boolean;
+}
+
 const handleErrorReport = async (request: Request, env: Env) => {
   const key = nanoid();
   await env.R2_ERROR_REPORTS.put(key, request.body);
@@ -24,9 +29,16 @@ const getErrorReport = async (reportKey: string | undefined, env: Env) => {
     return jsonBadRequest();
   }
 
-  const reportBlob = await env.R2_ERROR_REPORTS.get(reportKey);
+  const reportKV = await env.KV_ERRORS.get(reportKey);
+  if (!reportKV) {
+    return jsonNotFound({ sys: "kv" });
+  }
+
+  const kvVal = JSON.parse(reportKV) as ReportKV;
+
+  const reportBlob = await env.R2_ERROR_REPORTS.get(kvVal.key);
   if (!reportBlob) {
-    return jsonNotFound();
+    return jsonNotFound({ sys: "r2" });
   }
 
   const report = await reportBlob.json();
