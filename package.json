@@ -15,6 +15,7 @@
   "scripts": {
     "api:dev": "yarn workspace workers api:dev",
     "cron:push": "yarn workspace workers cron:publish",
+    "errors:push": "yarn errors-ui:push && yarn errors-api:push",
     "errors-ui:dev": "yarn workspace errors-ui start",
     "errors-ui:push": "yarn workspace errors-ui push",
     "errors-api:dev": "yarn workspace errors-api dev",
