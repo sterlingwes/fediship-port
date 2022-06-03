@@ -4,7 +4,10 @@ import { jsonBadRequest, jsonNotFound, jsonSuccess, Env } from "api-common";
 const handleErrorReport = async (request: Request, env: Env) => {
   const key = nanoid();
   await env.R2_ERROR_REPORTS.put(key, request.body);
-  await env.KV_ERRORS.put(key, "0");
+  await env.KV_ERRORS.put(
+    Date.now().toString(),
+    JSON.stringify({ key, read: false })
+  );
   return jsonSuccess({ saved: true });
 };
 
