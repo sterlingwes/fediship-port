@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const api = process.env.REACT_APP_API_BASE;
@@ -11,11 +11,11 @@ interface ListResponse {
   more: boolean;
 }
 
-interface ReportDetail {
+interface ReportDetail extends Record<string, any> {
   name: string;
   error?: string;
   message?: string;
-  stack: string;
+  stack?: string;
 }
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
         setError("No reports available");
         return;
       }
-      setList(list.reports);
+      setList(list.reports.sort((a, b) => Number(a.name) - Number(a.name)));
     };
 
     setLoading(true);
@@ -67,6 +67,13 @@ function App() {
       await response.json();
     setReportDetail({ ...report, name: key });
   };
+
+  const reportMeta = useMemo(() => {
+    const metaKeys = Object.keys(reportDetail ?? {}).filter(
+      (key) => ["error", "stack", "message"].includes(key) === false
+    );
+    return metaKeys;
+  }, [reportDetail]);
 
   return (
     <div className="App">
@@ -107,6 +114,19 @@ function App() {
                   <>
                     <h3>Stack</h3>
                     <p>{reportDetail.stack}</p>
+                  </>
+                )}
+                {reportMeta.length && (
+                  <>
+                    <h3>Metadata</h3>
+                    <ul>
+                      {reportMeta.map((key) => (
+                        <li>
+                          <b>{key}:</b>
+                          {reportDetail[key]}
+                        </li>
+                      ))}
+                    </ul>
                   </>
                 )}
               </div>
