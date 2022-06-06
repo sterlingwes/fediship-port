@@ -19,12 +19,12 @@ h2 {
   padding-top: 20px;
 }
 
-ul {
+.menu ul {
   max-width: 400px;
   list-style: none;
 }
 
-ul li {
+.menu ul li {
   background-color: #eee;
   border-radius: 4px;
   padding: 10px;
@@ -32,7 +32,7 @@ ul li {
   cursor: pointer;
 }
 
-ul li.active {
+.menu ul li.active {
   font-weight: bold;
 }
 

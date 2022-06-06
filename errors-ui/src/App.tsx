@@ -42,7 +42,7 @@ function App() {
         setError("No reports available");
         return;
       }
-      setList(list.reports.sort((a, b) => Number(a.name) - Number(a.name)));
+      setList(list.reports.sort((a, b) => Number(b.name) - Number(a.name)));
     };
 
     setLoading(true);
@@ -70,7 +70,7 @@ function App() {
 
   const reportMeta = useMemo(() => {
     const metaKeys = Object.keys(reportDetail ?? {}).filter(
-      (key) => ["error", "stack", "message"].includes(key) === false
+      (key) => ["error", "stack", "message", "name"].includes(key) === false
     );
     return metaKeys;
   }, [reportDetail]);
@@ -84,7 +84,7 @@ function App() {
         <div>
           <p>Showing {list.length} reports</p>
           <div className="row">
-            <div className="col">
+            <div className="col menu">
               <ul>
                 {list.map((report) => {
                   const date = new Date(Number(report.name));
@@ -122,8 +122,7 @@ function App() {
                     <ul>
                       {reportMeta.map((key) => (
                         <li>
-                          <b>{key}:</b>
-                          {reportDetail[key]}
+                          <b>{key}:</b> {reportDetail[key].toLocaleString()}
                         </li>
                       ))}
                     </ul>
