@@ -1,0 +1,30 @@
+{
+  "name": "mastoservers",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "push": "yarn build && wrangler pages publish --project-name mastoservers --branch main out",
+    "getgeos": "ts-node --compilerOptions='{\"module\":\"commonjs\"}' scripts/get-locations.ts",
+    "updategeodb": "node ./node_modules/geoip-lite/scripts/updatedb.js license_key=$MAXMIND_LICENSE_KEY"
+  },
+  "dependencies": {
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.5",
+    "next": "13.0.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.9.3"
+  },
+  "devDependencies": {
+    "@types/geoip-lite": "^1.4.1",
+    "geoip-lite": "^1.4.6",
+    "ts-node": "^10.8.0"
+  }
+}
