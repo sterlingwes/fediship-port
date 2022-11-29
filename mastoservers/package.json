@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/geoip-lite": "^1.4.1",
     "geoip-lite": "^1.4.6",
+    "ip-range-check": "^0.2.0",
     "ts-node": "^10.8.0"
   }
 }

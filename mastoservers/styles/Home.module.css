@@ -138,6 +138,11 @@
     width: 100%;
     flex-direction: column;
   }
+
+  .detailContainer {
+    width: 100%;
+    flex-direction: column;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

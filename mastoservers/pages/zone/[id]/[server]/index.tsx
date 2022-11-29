@@ -43,6 +43,7 @@ export default function ServerPage({server}: {server: Server}) {
           <div>
             <p>{server.description}</p>
             {server.approval_required && <p>Registration Approval Required</p>}
+            <p>Region: {server.region}</p>
             <p>Users: {numFormat.format(server.total_users)}</p>
             <p>Categories: {server.categories?.join(', ')}</p>
             <p>Languages: {server.languages?.join(', ')}</p>
